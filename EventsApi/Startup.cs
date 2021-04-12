@@ -38,6 +38,8 @@ namespace EventsApi
 
             services.AddDbContext<EventsApiContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("EventsApiContext")));
+
+            services.AddAutoMapper(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EventsApi.Data;
 using EventsApi.Models.Entities;
+using AutoMapper;
+using EventsApi.Models.DTO;
 
 namespace EventsApi.Controllers
 {
@@ -14,19 +16,22 @@ namespace EventsApi.Controllers
     [ApiController]
     public class EventDaysController : ControllerBase
     {
-        private readonly EventsApiContext _context;
+        private readonly IMapper mapper;
+        private EventRepo eventDayRepo;
 
-        public EventDaysController(EventsApiContext context)
+        public EventDaysController(EventsApiContext context,IMapper mapper)
         {
-            _context = context;
+            eventDayRepo = new EventRepo(context);
+            this.mapper = mapper;
         }
 
-        // GET: api/EventDays
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<EventDay>>> GetEventDay()
-        //{
-           
-        //}
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<EventDay>>> GetAllEvent(bool includeLectures = false)
+        {
+            var result = await eventDayRepo.GetAllAsync(includeLectures);
+            var dto = mapper.Map<EventDayDto>(result);
+            return Ok(dto);
+        }
 
 
     }

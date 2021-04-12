@@ -9,11 +9,12 @@ namespace EventsApi.Data
 {
     public class EventsApiContext : DbContext
     {
+        public DbSet<EventDay> EventDays { get; set; }
+
         public EventsApiContext (DbContextOptions<EventsApiContext> options)
             : base(options)
         {
         }
 
-        public DbSet<EventsApi.Models.Entities.EventDay> EventDay { get; set; }
     }
 }
