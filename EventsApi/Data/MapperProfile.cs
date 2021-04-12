@@ -13,6 +13,7 @@ namespace EventsApi.Data
         public MapperProfile()
         {
             CreateMap<EventDay, EventDayDto>().ReverseMap();
+            CreateMap<Lecture, LectureDto>().ReverseMap();
         }
     }
 }

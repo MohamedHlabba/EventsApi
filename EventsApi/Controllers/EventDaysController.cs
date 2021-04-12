@@ -19,7 +19,7 @@ namespace EventsApi.Controllers
         private readonly IMapper mapper;
         private EventRepo eventDayRepo;
 
-        public EventDaysController(EventsApiContext context,IMapper mapper)
+        public EventDaysController(EventsApiContext context, IMapper mapper)
         {
             eventDayRepo = new EventRepo(context);
             this.mapper = mapper;
@@ -29,7 +29,7 @@ namespace EventsApi.Controllers
         public async Task<ActionResult<IEnumerable<EventDay>>> GetAllEvent(bool includeLectures = false)
         {
             var result = await eventDayRepo.GetAllAsync(includeLectures);
-            var dto = mapper.Map<EventDayDto>(result);
+            var dto = mapper.Map<IEnumerable<EventDayDto>>(result);
             return Ok(dto);
         }
 

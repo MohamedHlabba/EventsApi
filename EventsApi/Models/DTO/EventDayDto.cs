@@ -15,7 +15,7 @@ namespace EventsApi.Models.DTO
         public DateTime EventDate { get; set; }
         public int Length { get; set; }
 
-        public ICollection<Lecture> Lectures { get; set; }
+        public ICollection<LectureDto> Lectures { get; set; }
 
         public string LocationAddress { get; set; }
         public string LocationCityTown { get; set; }

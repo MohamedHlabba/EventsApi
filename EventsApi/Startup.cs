@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using EventsApi.Data;
 
+
 namespace EventsApi
 {
     public class Startup
@@ -29,7 +30,8 @@ namespace EventsApi
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddNewtonsoftJson();
 
             services.AddSwaggerGen(c =>
             {
@@ -39,7 +41,7 @@ namespace EventsApi
             services.AddDbContext<EventsApiContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("EventsApiContext")));
 
-            services.AddAutoMapper(typeof(Startup));
+            services.AddAutoMapper(typeof(MapperProfile));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
