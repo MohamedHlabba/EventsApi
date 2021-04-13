@@ -10,6 +10,7 @@ namespace EventsApi.Data
     public class EventsApiContext : DbContext
     {
         public DbSet<EventDay> EventDays { get; set; }
+        public DbSet<Lecture> Lectures { get; set; }
 
         public EventsApiContext (DbContextOptions<EventsApiContext> options)
             : base(options)

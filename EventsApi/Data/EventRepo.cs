@@ -28,6 +28,17 @@ namespace EventsApi.Data
                                              .ToListAsync();
         }
 
+        public async Task<Lecture[]> GetAllLecturesAsync(string name, bool includeSpeakers)
+        {
+            var query = db.Lectures.AsQueryable();
+
+            query = includeSpeakers ? query.Include(l => l.Speaker) : query;
+
+            query = query.Where(l => l.EventDay.Name == name.ToUpper());
+
+            return await query.ToArrayAsync();
+        }
+
         public async Task<EventDay> GetEventAsync(string name, bool includeLectures)
         {
             //ToDo validate name
