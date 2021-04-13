@@ -13,6 +13,8 @@ namespace EventsApi.Models.DTO
         [StringLength(10)]
         public string Name { get; set; }
         public DateTime EventDate { get; set; }
+
+        [Range(0,200)]
         public int Length { get; set; }
 
         public ICollection<LectureDto> Lectures { get; set; }

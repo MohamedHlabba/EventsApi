@@ -9,6 +9,7 @@ using EventsApi.Data;
 using EventsApi.Models.Entities;
 using AutoMapper;
 using EventsApi.Models.DTO;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace EventsApi.Controllers
 {
@@ -51,7 +52,7 @@ namespace EventsApi.Controllers
         [HttpPost]
         public async Task<ActionResult<EventDayDto>> CreateEvent(EventDayDto dto)
         {
-            if(await repo.GetEventAsync(dto.Name, false) != null)
+            if (await repo.GetEventAsync(dto.Name, false) != null)
             {
                 ModelState.AddModelError("Name", "Name in use");
                 return BadRequest(ModelState);
@@ -69,7 +70,51 @@ namespace EventsApi.Controllers
             {
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
+        }
+
+        [HttpPut("{name}")]
+        public async Task<ActionResult<EventDayDto>> PutEvent(string name, EventDayDto dto)
+        {
+            var eventday = await repo.GetEventAsync(name, false);
+
+            if (eventday is null) return StatusCode(StatusCodes.Status404NotFound);
+
+            mapper.Map(dto, eventday);
+
+            // repo.Update(eventday);
+            if(await repo.SaveAsync())
+            {
+                return Ok(mapper.Map<EventDayDto>(eventday));
+            }
+            else
+            {
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPatch("{name}")]
+        public async Task<ActionResult<EventDayDto>> PatchEvent(string name, JsonPatchDocument<EventDayDto> patchDocument)
+        {
+            var eventday = await repo.GetEventAsync(name, true); //ändra här
+
+            if (eventday is null) return NotFound();
+
+            var dto = mapper.Map<EventDayDto>(eventday);
+
+            patchDocument.ApplyTo(dto, ModelState);
+
+            if (!TryValidateModel(dto))
+                return BadRequest(ModelState);
+
+            mapper.Map(dto, eventday);
+
+            if (await repo.SaveAsync())
+                return Ok(mapper.Map<EventDayDto>(eventday));
+            else
+                return StatusCode(500);
 
         }
+
+
     }
 }
