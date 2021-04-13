@@ -16,6 +16,12 @@ namespace EventsApi.Data
             : base(options)
         {
         }
+        //protected override void OnModelCreating(ModelBuilder builder)
+        //{
+        //    base.OnModelCreating(builder);
+
+        //    builder.Entity<EventDay>().HasKey(l => new { l.Id, l.Lectures});
+        //}
 
     }
 }

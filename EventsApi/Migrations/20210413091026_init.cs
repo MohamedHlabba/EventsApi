@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EventsApi.Migrations
 {
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -43,7 +43,7 @@ namespace EventsApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EventDay",
+                name: "EventDays",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -55,9 +55,9 @@ namespace EventsApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EventDay", x => x.Id);
+                    table.PrimaryKey("PK_EventDays", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_EventDay_Location_LocationId",
+                        name: "FK_EventDays_Location_LocationId",
                         column: x => x.LocationId,
                         principalTable: "Location",
                         principalColumn: "Id",
@@ -68,20 +68,19 @@ namespace EventsApi.Migrations
                 name: "Lecture",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Level = table.Column<int>(type: "int", nullable: false),
                     EventDayId = table.Column<int>(type: "int", nullable: false),
-                    SpeakerId = table.Column<int>(type: "int", nullable: false)
+                    SpeakerId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Level = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Lecture", x => x.Id);
+                    table.PrimaryKey("PK_Lecture", x => new { x.EventDayId, x.SpeakerId });
                     table.ForeignKey(
-                        name: "FK_Lecture_EventDay_EventDayId",
+                        name: "FK_Lecture_EventDays_EventDayId",
                         column: x => x.EventDayId,
-                        principalTable: "EventDay",
+                        principalTable: "EventDays",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -93,14 +92,9 @@ namespace EventsApi.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_EventDay_LocationId",
-                table: "EventDay",
+                name: "IX_EventDays_LocationId",
+                table: "EventDays",
                 column: "LocationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Lecture_EventDayId",
-                table: "Lecture",
-                column: "EventDayId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Lecture_SpeakerId",
@@ -114,7 +108,7 @@ namespace EventsApi.Migrations
                 name: "Lecture");
 
             migrationBuilder.DropTable(
-                name: "EventDay");
+                name: "EventDays");
 
             migrationBuilder.DropTable(
                 name: "Speaker");
