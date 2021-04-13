@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EventsApi.Migrations
 {
-    public partial class init : Migration
+    public partial class dbset : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -65,26 +65,27 @@ namespace EventsApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Lecture",
+                name: "Lectures",
                 columns: table => new
                 {
-                    EventDayId = table.Column<int>(type: "int", nullable: false),
-                    SpeakerId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Level = table.Column<int>(type: "int", nullable: false)
+                    Level = table.Column<int>(type: "int", nullable: false),
+                    EventDayId = table.Column<int>(type: "int", nullable: false),
+                    SpeakerId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Lecture", x => new { x.EventDayId, x.SpeakerId });
+                    table.PrimaryKey("PK_Lectures", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Lecture_EventDays_EventDayId",
+                        name: "FK_Lectures_EventDays_EventDayId",
                         column: x => x.EventDayId,
                         principalTable: "EventDays",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Lecture_Speaker_SpeakerId",
+                        name: "FK_Lectures_Speaker_SpeakerId",
                         column: x => x.SpeakerId,
                         principalTable: "Speaker",
                         principalColumn: "Id",
@@ -97,15 +98,20 @@ namespace EventsApi.Migrations
                 column: "LocationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Lecture_SpeakerId",
-                table: "Lecture",
+                name: "IX_Lectures_EventDayId",
+                table: "Lectures",
+                column: "EventDayId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Lectures_SpeakerId",
+                table: "Lectures",
                 column: "SpeakerId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Lecture");
+                name: "Lectures");
 
             migrationBuilder.DropTable(
                 name: "EventDays");

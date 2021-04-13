@@ -28,16 +28,7 @@ namespace EventsApi.Data
                                              .ToListAsync();
         }
 
-        public async Task<Lecture[]> GetAllLecturesAsync(string name, bool includeSpeakers)
-        {
-            var query = db.Lectures.AsQueryable();
-
-            query = includeSpeakers ? query.Include(l => l.Speaker) : query;
-
-            query = query.Where(l => l.EventDay.Name == name.ToUpper());
-
-            return await query.ToArrayAsync();
-        }
+      
 
         public async Task<EventDay> GetEventAsync(string name, bool includeLectures)
         {
@@ -63,6 +54,12 @@ namespace EventsApi.Data
         public async Task<bool> SaveAsync()
         {
             return (await db.SaveChangesAsync()) >= 0;
+
         }
+        //public async Task  Delete(string name)
+        //{
+        //   var item= db.EventDays.Where(e=>e.Name==name).FirstOrDefault();
+        //  await  db.Remove(item);
+        //}
     }
 }

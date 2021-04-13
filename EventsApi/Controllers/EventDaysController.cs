@@ -33,30 +33,29 @@ namespace EventsApi.Controllers
             var dto = mapper.Map<IEnumerable<EventDayDto>>(result);
             return Ok(dto);
         }
-        [HttpGet("{id}")]
-        public async Task<ActionResult<EventDay>> GetAsync(int? id)
-        {
-            var result = await eventDayRepo.GetAsync(id);
-            if (result is null) return NotFound();
-            var dto = mapper.Map<EventDayDto>(result);
-            return Ok(dto);
-        }
-        [HttpPost]
-        public async Task<ActionResult> Post(CreateEventDto createventDaydto)
-        {
-            var eventDay = mapper.Map<EventDay>(createventDaydto);
-            eventDayRepo.AddEvent(eventDay);
-            {
-                if (ModelState.IsValid)
-                {
-                    await eventDayRepo.CompleteAsync();
-                    return CreatedAtAction(nameof(GetAsync),new { id = eventDay.Id },eventDay);
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<EventDay>> GetAsync(int? id)
+        //{
+        //    var result = await repo.GetAsync(id);
+        //    if (result is null) return NotFound();
+        //    var dto = mapper.Map<EventDayDto>(result);
+        //    return Ok(dto);
+        //}
+        //public async Task<ActionResult> Post(CreateEventDto createventDaydto)
+        //{
+        //    var eventDay = mapper.Map<EventDay>(createventDaydto);
+        //    eventDayRepo.AddEvent(eventDay);
+        //    {
+        //        if (ModelState.IsValid)
+        //        {
+        //            await eventDayRepo.CompleteAsync();
+        //            return CreatedAtAction(nameof(GetAsync),new { id = eventDay.Id },eventDay);
 
-                }
-                return BadRequest();
-            }
+        //        }
+        //        return BadRequest();
+        //    }
 
-        }
+        //}
         //[HttpPost]
         //public async Task<IActionResult> Create(CreateEventDto createventDaydto)
         //{

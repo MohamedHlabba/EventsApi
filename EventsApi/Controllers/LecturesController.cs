@@ -15,28 +15,48 @@ namespace EventsApi.Controllers
     {
         private readonly EventsApiContext db;
         private readonly IMapper mapper;
-        private readonly EventRepo repo;
+        private readonly LectureRepo repo;
 
         public LecturesController(EventsApiContext db, IMapper mapper)
         {
             this.db = db;
             this.mapper = mapper;
-            repo = new EventRepo(db);
+            repo = new LectureRepo(db);
         }
+
+        //[HttpGet]
+        //public async Task<ActionResult<LectureDto>> GetAll(string name, bool includeSpeakers = false)
+        //{
+        //    var lectures = await repo.GetAllLecturesAsync(name, includeSpeakers);
+        //    var model = mapper.Map<LectureDto[]>(lectures);
+        //    return Ok(model);
+        //}
 
         [HttpGet]
-        public async Task<ActionResult<LectureDto>> GetAll(string name, bool includeSpeakers = false)
+        public async Task<ActionResult<LectureDto>> GetAllLecturesForEvent(string name, bool includeSpeakers = false)
         {
+            if (!repo.EventExists(name))
+            {
+                return StatusCode(404);
+            }
             var lectures = await repo.GetAllLecturesAsync(name, includeSpeakers);
-            var model = mapper.Map<LectureDto[]>(lectures);
-            return Ok(model);
+            return Ok(mapper.Map<IEnumerable<LectureDto>>(lectures));
         }
 
-       // [HttpGet("{id:int}")]
-
-        public async Task<ActionResult<LectureDto>> AddLecture(string name, LectureDto dto)
+        [HttpGet("{id:int}")]
+        public ActionResult<LectureDto> GetLectureForEvent(string name, int id)
         {
-            return Ok();
+            if (!repo.EventExists(name))
+            {
+                return StatusCode(404);
+            }
+            var lectureForEventFromRepo = repo.GetLecture(name,id);
+            if (lectureForEventFromRepo is null)
+            {
+
+                return StatusCode(404);
+            }
+            return Ok(mapper.Map<LectureDto>(lectureForEventFromRepo));
         }
 
 
